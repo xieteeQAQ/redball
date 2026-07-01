@@ -113,12 +113,13 @@ int main(int argc, char *argv[])
         circle.draw_circle(state.render);
         SDL_RenderPresent(state.render);
 
+        std::cout << "\rv_x: " << circle._veloc_x << ", v_y: " << circle._veloc_y << std::flush;
+
         SDL_Delay(static_cast<Uint32>(dt * 1000.0f));
     }
 
     free_window(state);
 
-    std::cout << "hello world\n";
     return 0;
 }
 
@@ -168,10 +169,12 @@ void Circle::refresh(float dt)
         Acc_x = 0.0f;
 
     float area = PI * _radius * _radius * 0.0001f;
-    float speed = _veloc_y;
-    float drag = 0.5f * 0.1225f * 0.047f * area * speed * speed;
-    float dragAcc_x = _veloc_x > 0 ? -(drag / _mass) : (drag / _mass);
-    float dragAcc_y = _veloc_y > 0 ? -(drag / _mass) : (drag / _mass);
+    float speed_y = _veloc_y;
+    float speed_x = _veloc_x;
+    float drag_x = 0.5f * 0.1225f * 0.047f * area * speed_x * speed_x;
+    float drag_y = 0.5f * 0.1225f * 0.047f * area * speed_y * speed_y;
+    float dragAcc_x = _veloc_x > 0 ? -(drag_x / _mass) : (drag_x / _mass);
+    float dragAcc_y = _veloc_y > 0 ? -(drag_y / _mass) : (drag_y / _mass);
 
     _acceler_y = G + dragAcc_y - Acc_y;
     _veloc_y += _acceler_y * dt;
